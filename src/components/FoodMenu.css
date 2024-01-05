@@ -1,0 +1,62 @@
+.headwrapper {
+    padding: 0px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.logo,.cartIcon{
+    color: black;
+}
+.icons {
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.menus {
+    text-align: left;
+    padding: 20px;
+}
+
+.menus > h3 {
+    text-align: center;
+}
+
+.itemLists {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.item {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 900;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+.item>p {
+    text-align: center;
+    margin: 10px 0;
+}
+
+.add {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.btn {
+    padding: 8px 15px;
+    border: 1px solid black;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: black;
+    color: white;
+}

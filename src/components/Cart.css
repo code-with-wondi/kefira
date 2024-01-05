@@ -1,0 +1,30 @@
+.top{
+    margin-left: 10px;
+}
+.single{
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 10px;
+    border-bottom: 1px solid black;
+}
+.check{
+    display: flex;justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+.checkout{
+    width: 100px;
+    text-align: center;
+    padding: 5px 10px;
+    border: none;
+    background-color: black;
+    color: white;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+}
+Link{
+    text-decoration: none;
+    color: white;
+}
