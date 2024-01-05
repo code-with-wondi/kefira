@@ -10,8 +10,7 @@ const Reciept = () => {
        <p className='ord'>We recieved your order!!!</p>
        <p>Your order details</p>
        <p>Your order id is #10000</p>
-       <p>Solomon Alemu</p>
-       <p>09 84 90 76 66</p>
+       <p>Solomon Alemu 09 84 90 76 66</p>
        <div className="foodDetails">
        <div className="single">
 
