@@ -1,19 +1,30 @@
+
 .headwrapper {
-    padding: 0px 10px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 90%;
+    padding: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background-color: #fff;
+    z-index: 1000; /* Adjust the z-index as needed */
 }
-.logo,.cartIcon{
+
+.logo, .cartIcon {
     color: black;
 }
+
 .icons {
     font-size: 30px;
     cursor: pointer;
 }
 
 .menus {
+    margin-top: 70px;
     text-align: left;
+ 
     padding: 20px;
 }
 

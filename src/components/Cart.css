@@ -1,6 +1,9 @@
 .top{
     margin-left: 10px;
 }
+.foods{
+    margin-top: 70px;
+}
 .single{
     font-weight: 700;
     display: flex;

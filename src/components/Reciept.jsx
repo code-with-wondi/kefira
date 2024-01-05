@@ -5,7 +5,7 @@ import './Reciept.css'
 const Reciept = () => {
   return (
     <>
-       <Header />
+        <Header className="header" />
        <div className="recieptWrapper">
        <p className='ord'>We recieved your order!!!</p>
        <p>Your order details</p>

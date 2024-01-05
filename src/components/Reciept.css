@@ -1,7 +1,14 @@
 .recieptWrapper{
     padding-left: 10px;
+    margin-top: 50px;
 
 }
+
+  
+  .recieptWrapper {
+    /* Add padding to the top to accommodate the fixed header */
+    padding-top: 60px; /* Adjust this value based on the height of your header */
+  }
 .ord{
     font-size: 20px;
     font-weight: 700;

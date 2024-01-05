@@ -1,5 +1,7 @@
 .checkWrapper{
     margin: 5px 10px;
+    margin-top: 70px;
+    overflow-x: hidden;
 
 }
 .checkWrapper>p{
@@ -7,7 +9,7 @@
 }
 .checkWrapper>input{
     height: 30px;
-    width: 300px;
+    width: 90%;
     background-color: rgb(222, 214, 214);
     font-size: 15px;
     padding: 5px;
