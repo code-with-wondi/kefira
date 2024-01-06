@@ -109,6 +109,7 @@
     margin-bottom: 10px;
     gap: 10px;
     overflow-x: scroll;
+    
   }
   .tabBar:-webkit-scrollbar {
     display: none;
