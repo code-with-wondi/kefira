@@ -89,3 +89,46 @@
     background: black;
     color: white;
 }
+.tabBar {
+    display: flex;
+    margin-bottom: 10px;
+    overflow-x: auto; /* Enable horizontal scrolling */
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: transparent transparent; /* Firefox */
+  }
+  
+  .tabBar::-webkit-scrollbar {
+    width: 12px; /* Width of the scrollbar */
+  }
+  
+  .tabBar::-webkit-scrollbar-thumb {
+    background-color: transparent; /* Color of the scrollbar thumb */
+  }
+.tabBar {
+    display: flex;
+    margin-bottom: 10px;
+    gap: 10px;
+    overflow-x: scroll;
+  }
+  .tabBar:-webkit-scrollbar {
+    display: none;
+  }
+  .tabBar button {
+    background-color: #f2f2f2;
+    border: 1px solid #ccc;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-radius: 10px;
+    
+  }
+  
+  .tabBar button:hover {
+    background-color: #ddd;
+  }
+  
+  .tabBar button.active {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
