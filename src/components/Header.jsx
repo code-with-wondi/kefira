@@ -8,15 +8,14 @@ const Header = () => {
 
   // Handle click on the cart icon
   const handleCartClick = () => {
-    // Do any additional actions when the cart icon is clicked
-    // For example, mark the notification as read
+    
     setShowNotification(false);
   };
 
   return (
     <>
       <div className="headwrapper">
-        <Link to='/' className='logo'> <h2>Kefira</h2></Link>
+        <Link to='/' className='logo'> <h2 className='ll'>Kefira</h2></Link>
         <Link to='/cart' className='cartIcon' onClick={() => handleCartClick()}>
           <FaBasketShopping className={`icons ${showNotification ? 'notification-dot' : ''}`} />
         </Link>

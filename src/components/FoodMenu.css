@@ -11,6 +11,11 @@
     background-color: #fff;
     z-index: 1000; /* Adjust the z-index as needed */
 }
+.ll{
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
 .notification-dot {
     position: absolute;
     top: 0;
@@ -43,11 +48,13 @@
     margin-top: 70px;
     text-align: left;
  
-    padding: 20px;
+    padding: 10px;
 }
 
 .menus > h3 {
     text-align: center;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .itemLists {
