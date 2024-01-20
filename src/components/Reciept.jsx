@@ -58,13 +58,13 @@ const Reciept = () => {
       <div className="recieptWrapper">
         <div className="cardview">
         <p className="ord">We received your order!!!</p>
-        <p>{orderDetails.id}</p>
+        <p>Your order id {orderDetails.id}</p>
        
      
        <div className="foodDetails">
          <div className="single">
            <h4>Foods</h4>
-           <h4>QUantity</h4>
+           <h4>Quantity</h4>
            <h4>Price</h4>
          </div>
 
@@ -91,7 +91,7 @@ const Reciept = () => {
        <i>Price is including Delivery fee</i>
        
         </div>
-        <button onClick={handlePrint}>Print Receipt</button>
+        <button onClick={handlePrint} className='placeOrd'>Print Receipt</button>
         <p className="ho">
          
           
