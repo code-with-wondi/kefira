@@ -2,12 +2,59 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './FoodMenu.css';
 import Header from './Header';
-import Cart from './Cart';
+import { initializeApp } from 'firebase/app';
+import { getFirestore, collection, addDoc } from 'firebase/firestore';
+
 
 const FoodMenu = () => {
-  const [cartItems, setCartItems] = useState([]);
+  const [userInput, setUserInput] = useState({
+    fullName: '',
+    phoneNumber: '',
+    paymentOption: '',
+  });
+
+  const handleInputChange = (field, value) => {
+    setUserInput(prevState => ({
+      ...prevState,
+      [field]: value,
+    }));
+  };
+
+  const handlePaymentOptionChange = (option) => {
+    setUserInput(prevState => ({
+      ...prevState,
+      paymentOption: option,
+    }));
+  };
+
+  const [showCheckWrapper, setShowCheckWrapper] = useState(false);
+
+  const handleButtonClick = () => {
+    setShowCheckWrapper(true);
+  };
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBzD0dl_IJIuRbE3B-YQ1sTLxH3ZlRqi4M",
+    authDomain: "kefira-7e219.firebaseapp.com",
+    projectId: "kefira-7e219",
+    storageBucket: "kefira-7e219.appspot.com",
+    messagingSenderId: "67101442168",
+    appId: "1:67101442168:web:45ef5f0b028a037ddfed8d",
+    measurementId: "G-QCPD3LH7PT"
+  };
+
+  const [selectedOption, setSelectedOption] = useState(null);
+
+  const handleOptionChange = (option) => {
+    setSelectedOption(option);
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [foods, setFoods] = useState([]);
 
   const foodItems = [
     { id: 1, foodName: 'Mulu Sga Firfir', price: 160, category: 'Firfir' },
@@ -30,64 +77,183 @@ const FoodMenu = () => {
   { id: 18, foodName: 'Misr Wet Alcha', price: 80, category: 'Misr' }
   ];
 
-  useEffect(() => {
-    // Extract unique categories from food items
-    const uniqueCategories = [...new Set(foodItems.map(item => item.category))];
-    setCategories(['all', ...uniqueCategories]); // Adding 'all' as an option
-  }, [foodItems]);
+  const calculateTotal = () => {
+    const itemTotal = foods.reduce((acc, food) => {
+      const itemPrice = foodItems.find(item => item.foodName === food.foodName)?.price || 0;
+      return acc + itemPrice * food.quantity;
+    }, 0);
 
-  useEffect(() => {
-    // Retrieve cart items from local storage when the component mounts
-    const storedCartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-    setCartItems(storedCartItems);
-  }, []); // Empty dependency array ensures this runs only once on mount
-
-  const addToCart = (foodName, price) => {
-    const newItem = { foodName, price };
-    const newCartItems = [...cartItems, newItem];
-    setCartItems(newCartItems);
-    localStorage.setItem('cartItems', JSON.stringify(newCartItems));
+    return itemTotal;
   };
+
+  const addToFoods = (foodName, quantity, price) => {
+    setFoods((prevFoods) => {
+      const existingFoodIndex = prevFoods.findIndex(
+        (item) => item.foodName === foodName
+      );
+
+      if (existingFoodIndex !== -1) {
+        const updatedFoods = [...prevFoods];
+        updatedFoods[existingFoodIndex].quantity = quantity;
+        updatedFoods[existingFoodIndex].totalPrice = price * quantity;
+        return updatedFoods;
+      } else {
+        return [
+          ...prevFoods,
+          { foodName, quantity, price, totalPrice: price * quantity },
+        ];
+      }
+    });
+  };
+
+  const handleNextClick = async () => {
+    const total = foods.reduce(
+      (acc, food) => acc + food.totalPrice,
+      0
+    );
+
+    if (!userInput.fullName || !userInput.phoneNumber || !userInput.paymentOption) {
+      alert('Please fill in all the required information.');
+      return;
+    }
+
+    const newDocument = {
+      customerName: userInput.fullName,
+      phoneNumber: userInput.phoneNumber,
+      paymentOption: userInput.paymentOption,
+      foods,
+      orderDate: new Date().toISOString(),
+      total,
+    };
+
+    await addDoc(collection(db, 'orders'), newDocument);
+
+    setFoods([]);
+  };
+
+  const [selectedTag, setSelectedTag] = useState('all');
+
+  const handleTagClick = (tag) => {
+    setSelectedTag(tag);
+  };
+
+  const tags = [...new Set(foodItems.map(item => item.category))];
 
   return (
     <>
-      <Header />
+     
+<Header />
       <div className="menus">
         <h3>Foods List</h3>
         <div className="tabBar">
-          {categories.map(category => (
+          {tags.map(tag => (
             <button
-              key={category}
-              className={selectedCategory === category ? 'active' : ''}
-              onClick={() => setSelectedCategory(category)}
+              key={tag}
+              className={selectedTag === tag ? 'active' : ''}
+              onClick={() => handleTagClick(tag)}
             >
-              {category}
+              {tag}
             </button>
           ))}
         </div>
         <div className="itemLists">
           {foodItems
-            .filter(item => selectedCategory === 'all' || item.category === selectedCategory)
-            .map(item => (
+            .filter(
+              (item) =>
+                selectedCategory === 'all' || item.category === selectedCategory
+            )
+            .filter(
+              (item) =>
+                selectedTag === 'all' || item.category === selectedTag
+            )
+            .map((item) => (
               <div className="item" key={item.id}>
                 <p>{item.foodName}</p>
                 <p>{item.price} Br</p>
                 <div className="add">
-                  <p>-</p>
-                  <div
-                    className="btn"
-                    onClick={() => addToCart(item.foodName, item.price)}
+                  <p onClick={() => addToFoods(item.foodName, 0, item.price)}>-</p>
+                  <input
+                    type="number"
+                    min="0"
+                    value={
+                      foods.find(
+                        (food) => food.foodName === item.foodName
+                      )?.quantity || ''
+                    }
+                    onChange={(e) =>
+                      addToFoods(item.foodName, e.target.value, item.price)
+                    }
+                  />
+                  <p
+                    onClick={() =>
+                      addToFoods(
+                        item.foodName,
+                        (foods.find((food) => food.foodName === item.foodName)
+                          ?.quantity || 0) + 1,
+                        item.price
+                      )
+                    }
                   >
-                    Add
-                  </div>
-                  <p>+</p>
+                    +
+                  </p>
                 </div>
               </div>
             ))}
         </div>
-        <Link to="/cart">
-          <p className="checkou">Go to your Festal</p>
-        </Link>
+
+        <div className="btnwrapper">
+          <p>Fill important information</p>
+        </div>
+
+        <div className="checkWrapper">
+          <h4>Please fill important information</h4>
+
+          <input
+            type="text"
+            placeholder="Your full name"
+            value={userInput.fullName}
+            onChange={(e) => handleInputChange('fullName', e.target.value)}
+          />
+          <input
+            type="number"
+            placeholder="Your phone number"
+            value={userInput.phoneNumber}
+            onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
+          />
+          <p>Payment option</p>
+          <div className="payWrapper">
+            <label>
+              <input
+                type="radio"
+                name="paymentOption"
+                value="10009098686 Andnet Melaku"
+                checked={userInput.paymentOption === "Bank transfer"}
+                onChange={() => handlePaymentOptionChange("10009098686 Andnet Melaku")}
+              />
+              Bank Transfer
+            </label>
+
+            <br />
+
+            <label>
+              <input
+                type="radio"
+                name="paymentOption"
+                value="You will pay when you receive a food!"
+                checked={userInput.paymentOption === "Cash on delivery"}
+                onChange={() => handlePaymentOptionChange("You will pay when you receive a food!")}
+              />
+              Cash on delivery
+            </label>
+          </div>
+
+          <p>{userInput.paymentOption && `${userInput.paymentOption}`}</p>
+
+        </div>
+
+        <div onClick={handleNextClick} className="placeOrd">
+          <Link to='/reciept'>Place Order</Link>
+        </div>
       </div>
     </>
   );

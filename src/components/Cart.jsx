@@ -12,8 +12,11 @@ const Cart = () => {
     setCartItems(storedCartItems);
   }, []); // Empty dependency array ensures this runs only once on mount
 
+  // Filter items with quantity greater than 0
+  const filteredCartItems = cartItems.filter(item => item.quantity > 0);
+
   // Calculate total price
-  const total = cartItems.reduce((acc, item) => acc + item.price, 0);
+  const total = filteredCartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
   return (
     <>
@@ -23,12 +26,14 @@ const Cart = () => {
         <div className="single">
           <p>Foods</p>
           <p>Price</p>
+          <p>Quantity</p>
         </div>
-        {/* Display cart items */}
-        {cartItems.map((item, index) => (
+        {/* Display filtered cart items */}
+        {filteredCartItems.map((item, index) => (
           <div className="single" key={index}>
             <p>{item.foodName}</p>
             <p>{item.price} Br</p>
+            <p>{item.quantity}</p>
           </div>
         ))}
         {/* Display total */}
