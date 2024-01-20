@@ -5,7 +5,6 @@ import Header from './Header';
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
 
-
 const FoodMenu = () => {
   const [userInput, setUserInput] = useState({
     fullName: '',
@@ -14,14 +13,14 @@ const FoodMenu = () => {
   });
 
   const handleInputChange = (field, value) => {
-    setUserInput(prevState => ({
+    setUserInput((prevState) => ({
       ...prevState,
       [field]: value,
     }));
   };
 
   const handlePaymentOptionChange = (option) => {
-    setUserInput(prevState => ({
+    setUserInput((prevState) => ({
       ...prevState,
       paymentOption: option,
     }));
@@ -56,6 +55,24 @@ const FoodMenu = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [foods, setFoods] = useState([]);
 
+  const [deliveryFee, setDeliveryFee] = useState(0); // Move setDeliveryFee here
+
+  useEffect(() => {
+    // Calculate delivery fee based on the number of items in the cart
+    const itemCount = foods.reduce((acc, food) => acc + food.quantity, 0);
+    let calculatedDeliveryFee = 0;
+
+    if (itemCount === 1) {
+      calculatedDeliveryFee = 15;
+    } else if (itemCount === 2) {
+      calculatedDeliveryFee = 25;
+    } else if (itemCount >= 3) {
+      calculatedDeliveryFee = 45;
+    }
+
+    setDeliveryFee(calculatedDeliveryFee);
+  }, [foods]);
+
   const foodItems = [
     { id: 1, foodName: 'Mulu Sga Firfir', price: 160, category: 'Firfir' },
   { id: 2, foodName: 'Mulu Tibs Firfir', price: 180, category: 'Firfir' },
@@ -79,7 +96,7 @@ const FoodMenu = () => {
 
   const calculateTotal = () => {
     const itemTotal = foods.reduce((acc, food) => {
-      const itemPrice = foodItems.find(item => item.foodName === food.foodName)?.price || 0;
+      const itemPrice = foodItems.find((item) => item.foodName === food.foodName)?.price || 0;
       return acc + itemPrice * food.quantity;
     }, 0);
 
@@ -123,12 +140,14 @@ const FoodMenu = () => {
       paymentOption: userInput.paymentOption,
       foods,
       orderDate: new Date().toISOString(),
-      total,
+      total: total + deliveryFee, // Include delivery fee in the total
+      deliveryFee, // Include delivery fee separately
     };
 
     await addDoc(collection(db, 'orders'), newDocument);
 
     setFoods([]);
+    setDeliveryFee(0);
   };
 
   const [selectedTag, setSelectedTag] = useState('all');
@@ -137,8 +156,7 @@ const FoodMenu = () => {
     setSelectedTag(tag);
   };
 
-  const tags = [...new Set(foodItems.map(item => item.category))];
-
+  const tags = [...new Set(foodItems.map((item) => item.category))];
   return (
     <>
      

@@ -7,9 +7,8 @@
 .single{
     font-weight: 700;
     display: flex;
-    justify-content: space-between;
-    padding: 5px 10px;
-    border-bottom: 1px solid black;
+    justify-content: space-around;
+    
 }
 .check{
     display: flex;justify-content: center;

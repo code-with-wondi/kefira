@@ -4,8 +4,12 @@ import Header from './Header';
 import { getFirestore, collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
 import './Reciept.css';
 import { initializeApp } from 'firebase/app';
+import { FaLocationDot } from "react-icons/fa6";
 
 const Reciept = () => {
+  const handlePrint = () => {
+    window.print();
+  };
   const firebaseConfig = {
     apiKey: "AIzaSyBzD0dl_IJIuRbE3B-YQ1sTLxH3ZlRqi4M",
     authDomain: "kefira-7e219.firebaseapp.com",
@@ -25,6 +29,7 @@ const Reciept = () => {
     paymentOption: '',
   });
 
+
   useEffect(() => {
     const fetchRecentOrder = async () => {
       const q = query(collection(db, 'orders'), orderBy('orderDate', 'desc'), limit(1));
@@ -35,9 +40,10 @@ const Reciept = () => {
         setOrderDetails({
           foods: recentOrderData.foods || [],
           total: recentOrderData.total || 0,
-          name: recentOrderData.name || '', // Assuming you have 'name' field in your Firestore document
-          phoneNumber: recentOrderData.phoneNumber || '', // Assuming you have 'phoneNumber' field
-          paymentOption: recentOrderData.paymentOption || '', // Assuming you have 'paymentOption' field
+          id: querySnapshot.docs[0].id, // Include the ID if you have it
+          name: recentOrderData.customerName || '', // Update to 'customerName'
+          phoneNumber: recentOrderData.phoneNumber || '',
+          paymentOption: recentOrderData.paymentOption || '',
         });
       }
     };
@@ -45,42 +51,50 @@ const Reciept = () => {
     fetchRecentOrder();
   }, [db]);
 
+
   return (
     <>
       <Header className="header" />
       <div className="recieptWrapper">
+        <div className="cardview">
         <p className="ord">We received your order!!!</p>
-        <p>Your order details</p>
-        <p>Your order id is #{orderDetails.id}</p>
-        <p>{orderDetails.name} {orderDetails.phoneNumber}</p>
-        <div className="foodDetails">
-          <div className="single">
-            <p>Foods</p>
-            <p>Price</p>
-          </div>
+        <p>{orderDetails.id}</p>
+       
+     
+       <div className="foodDetails">
+         <div className="single">
+           <h4>Foods</h4>
+           <h4>QUantity</h4>
+           <h4>Price</h4>
+         </div>
 
-          {orderDetails.foods.map((food) => (
-            <div className="single" key={food.foodName}>
-              <p>{food.foodName}</p>
-              <p>{food.price} Br</p>
-            </div>
-          ))}
-
-          <div className="single">
-            <p>Total</p>
-            <p>{orderDetails.total} Br</p>
-          </div>
+         {orderDetails.foods.map((food) => (
+          <>
+           <div className="single" key={food.foodName}>
+             <p>{food.foodName}</p>
+             <p>{food.quantity}</p>
+             <p>{food.price} Br</p>
+           </div>
+           
+           </>
+         ))}
+         
+  <hr />
+         <div className="singlespecial">
+           <p className='tot'>Total</p>
+           <p className='da'>{orderDetails.total} Br</p>
+         </div>
+       </div>
+       <p className="pick"><span><FaLocationDot color='blue' /></span>You will pick your food at amfi lounge</p>
+       <p className='pick'>{orderDetails.paymentOption}</p>
+       <br />
+       <i>Price is including Delivery fee</i>
+       
         </div>
-        <p className="pick">Pick up location at Amphi Lounge</p>
-        <p>Preferred Payment option is {orderDetails.paymentOption}</p>
-        <div className="caution">
-          <p>You can take a screenshot so you can use it as a receipt.</p>
-        </div>
+        <button onClick={handlePrint}>Print Receipt</button>
         <p className="ho">
-          {' '}
-          <Link to="/" className="hom">
-            Go Home
-          </Link>
+         
+          
         </p>
       </div>
     </>

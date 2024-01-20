@@ -10,8 +10,12 @@
     padding-top: 60px; /* Adjust this value based on the height of your header */
   }
 .ord{
-    font-size: 20px;
-    font-weight: 700;
+    margin-top: 5px;
+
+    font-size: 16px;
+    text-align: center;
+    font-weight: 500;
+
 }
 .recieptWrapper>p{
     
@@ -20,15 +24,65 @@ font-weight: 600;
 .caution{
     text-align: center;
     padding: 8px;
-    background-color: #000;
-    color: #fff;
-    border-radius: 20px;
+    color: #000;
+ 
+   
 }
 .hom{
    
-    color: #000;
+    color: #5F0F40;
 }
 .ho{
     margin-top: 20px;
     text-align: center;
+}
+.single>p{
+    font-size: 13px;
+    font-weight: 400;
+    margin: 8px;
+}
+.tit{
+    font-size: 20px;
+}
+
+.pick>span{
+    font-size: 18px;
+}
+.iconss{
+    background-color: blue;
+    font-size: 20px;
+
+}
+.tit{
+    font-weight: 800;
+    
+}
+.single>h4{
+    margin-top: 10px;
+}
+.tot{
+    text-align: center;
+    font-weight: 400;
+    font-style:bold;
+    font-size: small;
+    margin-bottom: 5px;
+}
+.da{
+    margin-top: 3px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+    color: brown;
+}
+.pick{
+    display: flex;
+    
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+}
+.placeOrd{
+    background-color: #FFB000;
+    font-weight: 700;
+    border: 2px solid #E36414;
 }
