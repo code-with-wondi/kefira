@@ -126,7 +126,7 @@ const FoodMenu = () => {
   };
   const isOrderTimeValid = () => {
     const currentHour = new Date().getHours();
-    return currentHour >= 21 && currentHour < 24;
+    return currentHour >= 17 && currentHour < 21;
   };
   const handleNextClick = async () => {
     const total = foods.reduce(
