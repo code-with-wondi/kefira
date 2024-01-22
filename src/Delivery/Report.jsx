@@ -88,7 +88,7 @@ const Report = () => {
       <table className='orderTable'>
         <thead>
           <tr>
-            <th>Order ID</th>
+            <th>UGR</th>
             <th>Customer Name</th>
             <th>Total</th>
             <th>Quantity</th>

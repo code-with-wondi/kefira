@@ -69,7 +69,7 @@ const FoodMenu = () => {
     } else if (itemCount === 2) {
       calculatedDeliveryFee = 25;
     } else if (itemCount >= 3) {
-      calculatedDeliveryFee = 45;
+      calculatedDeliveryFee = 35;
     }
 
     setDeliveryFee(calculatedDeliveryFee);
@@ -126,7 +126,7 @@ const FoodMenu = () => {
   };
   const isOrderTimeValid = () => {
     const currentHour = new Date().getHours();
-    return currentHour >= 16 && currentHour < 20;
+    return currentHour >= 19 && currentHour < 20;
   };
   const handleNextClick = async () => {
     const total = foods.reduce(
@@ -235,6 +235,7 @@ const FoodMenu = () => {
 
           <div className="checkWrapper">
             <h4>Please fill important information</h4>
+            <i>we ask you UGR for verfication propose</i>
             <input
           type="text"
           placeholder="UGR ID"
@@ -242,6 +243,7 @@ const FoodMenu = () => {
           onChange={(e) => handleInputChange('ugrId', e.target.value)}
           required
         />
+        
             <input
               type="text"
               placeholder="Your full name"
@@ -301,8 +303,8 @@ const FoodMenu = () => {
       ) : (
         <div className="error-message">
          <IoFastFood className='error_logo'/> 
-         <h4>😭 Sorry! We are not available now</h4>
-         <p>We only work from 5:00AM to 8:00PM</p>
+         <h4>😭 Sorry! We are not available now </h4>
+         <p>We only work from 5:00AM to 8:00PM <br /><b>For more infromation call 0951670589</b></p>
         </div>
       )}
     </>
