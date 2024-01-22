@@ -83,7 +83,7 @@ const Report = () => {
           onChange={handleDateChange}
         />
       </div>
-      <p>Received Orders</p>
+      <p>Overall report</p>
 
       <table className='orderTable'>
         <thead>

@@ -40,8 +40,8 @@ const Reciept = () => {
         setOrderDetails({
           foods: recentOrderData.foods || [],
           total: recentOrderData.total || 0,
-          id: querySnapshot.docs[0].id, // Include the ID if you have it
-          name: recentOrderData.customerName || '', // Update to 'customerName'
+          id: querySnapshot.docs[0].id, 
+          name: recentOrderData.customerName || '', 
           phoneNumber: recentOrderData.phoneNumber || '',
           paymentOption: recentOrderData.paymentOption || '',
         });
