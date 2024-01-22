@@ -202,3 +202,19 @@ color: #fff;
   .tit{
     font-size: 20px;
   }
+  .error-message{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  .error_logo{
+    font-size: 200px;
+    color: #9A031E;
+  }
+  .error-message>h4{
+    font-size: 20px;
+    font-weight: 900;
+    margin-bottom: 10px;
+  }

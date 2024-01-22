@@ -26,21 +26,41 @@ const Delivery = () => {
   const toggleExpand = (orderId) => {
     setExpandedOrderId(orderId === expandedOrderId ? null : orderId);
   };
+
+  const isSameDay = (date1, date2) => {
+    const d1 = new Date(date1);
+    const d2 = new Date(date2);
+    return (
+      d1.getFullYear() === d2.getFullYear() &&
+      d1.getMonth() === d2.getMonth() &&
+      d1.getDate() === d2.getDate()
+    );
+  };
+
   useEffect(() => {
     const fetchOrders = async () => {
       try {
         const q = query(collection(db, 'orders'));
         const querySnapshot = await getDocs(q);
-  
+
         if (!querySnapshot.empty) {
-          const ordersData = querySnapshot.docs.map((doc) => {
-            const orderData = doc.data();
-            return {
-              id: doc.id,
-             
-              ...orderData,
-            };
+          const ordersData = querySnapshot.docs
+            .map((doc) => {
+              const orderData = doc.data();
+              return {
+                id: doc.id,
+                ...orderData,
+              };
+            })
+            .filter((order) => isSameDay(order.orderDate, new Date()));
+
+          // Sort orders by time (new at the top, older at the bottom)
+          ordersData.sort((a, b) => {
+            const timeA = new Date(a.orderDate).getTime();
+            const timeB = new Date(b.orderDate).getTime();
+            return timeB - timeA;
           });
+
           setOrders(ordersData);
         } else {
           console.log('No orders found.');
@@ -49,9 +69,10 @@ const Delivery = () => {
         console.error('Error fetching orders:', error);
       }
     };
-  
+
     fetchOrders();
   }, [db]);
+
   
 
   return (

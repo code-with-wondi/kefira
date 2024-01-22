@@ -78,6 +78,60 @@
     border-radius: 10px;
 
   }
-  .delWrapper{
-    margin-top: 100px;
-  }
+ Delivery.css */
+
+.delWrapper {
+  margin-top: 500px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.orderTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.orderTable th, .orderTable td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.orderTable th {
+  background-color: #f2f2f2;
+}
+
+.orderCard {
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+.headerj {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.foodDetails {
+  margin-top: 10px;
+}
+
+.single {
+  display: flex;
+  justify-content: space-between;
+}
+
+.pick {
+  margin-top: 10px;
+}
+
+.btnShow {
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.namee{
+  margin-top: 100px;
+}

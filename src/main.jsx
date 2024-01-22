@@ -8,6 +8,7 @@ import Cart from './components/Cart.jsx'
 import Checkout from './components/Checkout.jsx';
 import Reciept from './components/Reciept.jsx';
 import Delivery from './Delivery/Delivery.jsx';
+import Report from './Delivery/Report.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -18,6 +19,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/checkout" element={<Checkout />}/>
         <Route path="/reciept" element={<Reciept />}/>
         <Route path="/delivery" element={<Delivery />}/>
+        <Route path="/report" element={<Report />}/>
         
       </Routes>
   

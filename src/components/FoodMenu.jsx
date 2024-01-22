@@ -4,12 +4,15 @@ import './FoodMenu.css';
 import Header from './Header';
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
-
+import { IoFastFood } from "react-icons/io5";
 const FoodMenu = () => {
   const [userInput, setUserInput] = useState({
+    ugrId: '',
     fullName: '',
     phoneNumber: '',
+    additionalPhoneNumber: '', // Single additional phone number field
     paymentOption: '',
+    orderDate: new Date().toISOString().slice(0, 10),
   });
 
   const handleInputChange = (field, value) => {
@@ -55,10 +58,9 @@ const FoodMenu = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [foods, setFoods] = useState([]);
 
-  const [deliveryFee, setDeliveryFee] = useState(0); // Move setDeliveryFee here
+  const [deliveryFee, setDeliveryFee] = useState(0);
 
   useEffect(() => {
-    // Calculate delivery fee based on the number of items in the cart
     const itemCount = foods.reduce((acc, food) => acc + food.quantity, 0);
     let calculatedDeliveryFee = 0;
 
@@ -122,7 +124,10 @@ const FoodMenu = () => {
       }
     });
   };
-
+  const isOrderTimeValid = () => {
+    const currentHour = new Date().getHours();
+    return currentHour >= 16 && currentHour < 20;
+  };
   const handleNextClick = async () => {
     const total = foods.reduce(
       (acc, food) => acc + food.totalPrice,
@@ -137,12 +142,15 @@ const FoodMenu = () => {
     const newDocument = {
       customerName: userInput.fullName,
       phoneNumber: userInput.phoneNumber,
+      ugrId: userInput.ugrId, // Add ugrId
+      additionalPhoneNumber: userInput.additionalPhoneNumber, // Add additionalPhoneNumber
       paymentOption: userInput.paymentOption,
       foods,
-      orderDate: new Date().toISOString(),
-      total: total + deliveryFee, // Include delivery fee in the total
-      deliveryFee, // Include delivery fee separately
+      orderDate: new Date().toISOString().slice(0, 10), // Automatically set orderDate to today's date
+      total: total + deliveryFee,
+      deliveryFee,
     };
+
 
     await addDoc(collection(db, 'orders'), newDocument);
 
@@ -159,120 +167,144 @@ const FoodMenu = () => {
   const tags = [...new Set(foodItems.map((item) => item.category))];
   return (
     <>
-     
-<Header />
-      <div className="menus">
-        <h3>Foods List</h3>
-        <div className="tabBar">
-          {tags.map(tag => (
-            <button
-              key={tag}
-              className={selectedTag === tag ? 'active' : ''}
-              onClick={() => handleTagClick(tag)}
-            >
-              {tag}
-            </button>
-          ))}
-        </div>
-        <div className="itemLists">
-          {foodItems
-            .filter(
-              (item) =>
-                selectedCategory === 'all' || item.category === selectedCategory
-            )
-            .filter(
-              (item) =>
-                selectedTag === 'all' || item.category === selectedTag
-            )
-            .map((item) => (
-              <div className="item" key={item.id}>
-                <p>{item.foodName}</p>
-                <p>{item.price} Br</p>
-                <div className="add">
-                  <p onClick={() => addToFoods(item.foodName, 0, item.price)}>-</p>
-                  <input
-                    type="number"
-                    min="0"
-                    value={
-                      foods.find(
-                        (food) => food.foodName === item.foodName
-                      )?.quantity || ''
-                    }
-                    onChange={(e) =>
-                      addToFoods(item.foodName, e.target.value, item.price)
-                    }
-                  />
-                  <p
-                    onClick={() =>
-                      addToFoods(
-                        item.foodName,
-                        (foods.find((food) => food.foodName === item.foodName)
-                          ?.quantity || 0) + 1,
-                        item.price
-                      )
-                    }
-                  >
-                    +
-                  </p>
-                </div>
-              </div>
+      
+      {isOrderTimeValid() ? (
+        <>
+        <Header />
+        <div className="menus">
+          <h3>Foods List</h3>
+          <div className="tabBar">
+            {tags.map(tag => (
+              <button
+                key={tag}
+                className={selectedTag === tag ? 'active' : ''}
+                onClick={() => handleTagClick(tag)}
+              >
+                {tag}
+              </button>
             ))}
-        </div>
-
-        <div className="btnwrapper">
-          <p>Fill important information</p>
-        </div>
-
-        <div className="checkWrapper">
-          <h4>Please fill important information</h4>
-
-          <input
-            type="text"
-            placeholder="Your full name"
-            value={userInput.fullName}
-            onChange={(e) => handleInputChange('fullName', e.target.value)}
-          />
-          <input
-            type="number"
-            placeholder="Your phone number"
-            value={userInput.phoneNumber}
-            onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
-          />
-          <p>Payment option</p>
-          <div className="payWrapper">
-            <label>
-              <input
-                type="radio"
-                name="paymentOption"
-                value="10009098686 Andnet Melaku"
-                checked={userInput.paymentOption === "Bank transfer"}
-                onChange={() => handlePaymentOptionChange("10009098686 Andnet Melaku")}
-              />
-              Bank Transfer
-            </label>
-
-            <br />
-
-            <label>
-              <input
-                type="radio"
-                name="paymentOption"
-                value="You will pay when you receive a food!"
-                checked={userInput.paymentOption === "Cash on delivery"}
-                onChange={() => handlePaymentOptionChange("You will pay when you receive a food!")}
-              />
-              Cash on delivery
-            </label>
+          </div>
+          <div className="itemLists">
+            {foodItems
+              .filter(
+                (item) =>
+                  selectedCategory === 'all' || item.category === selectedCategory
+              )
+              .filter(
+                (item) =>
+                  selectedTag === 'all' || item.category === selectedTag
+              )
+              .map((item) => (
+                <div className="item" key={item.id}>
+                  <p>{item.foodName}</p>
+                  <p>{item.price} Br</p>
+                  <div className="add">
+                    <p onClick={() => addToFoods(item.foodName, 0, item.price)}>-</p>
+                    <input
+                      type="number"
+                      min="0"
+                      value={
+                        foods.find(
+                          (food) => food.foodName === item.foodName
+                        )?.quantity || ''
+                      }
+                      onChange={(e) =>
+                        addToFoods(item.foodName, e.target.value, item.price)
+                      }
+                    />
+                    <p
+                      onClick={() =>
+                        addToFoods(
+                          item.foodName,
+                          (foods.find((food) => food.foodName === item.foodName)
+                            ?.quantity || 0) + 1,
+                          item.price
+                        )
+                      }
+                    >
+                      +
+                    </p>
+                  </div>
+                </div>
+              ))}
           </div>
 
-          <p>{userInput.paymentOption && `${userInput.paymentOption}`}</p>
+          <div className="btnwrapper">
+            <p>Fill important information</p>
+          </div>
 
-        </div>
+          <div className="checkWrapper">
+            <h4>Please fill important information</h4>
+            <input
+          type="text"
+          placeholder="UGR ID"
+          value={userInput.ugrId}
+          onChange={(e) => handleInputChange('ugrId', e.target.value)}
+          required
+        />
+            <input
+              type="text"
+              placeholder="Your full name"
+              value={userInput.fullName}
+              onChange={(e) => handleInputChange('fullName', e.target.value)}
+            />
+            <input
+              type="number"
+              placeholder="Your phone number"
+              value={userInput.phoneNumber}
+              onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
+            />
+            <input
+          type="tel"
+          placeholder="Additional Phone Number"
+          value={userInput.additionalPhoneNumber}
+          onChange={(e) => handleInputChange('additionalPhoneNumber', e.target.value)}
+          required
+        />
+            <p>Payment option</p>
+            <div className="payWrapper">
+              <label>
+                <input
+                  type="radio"
+                  name="paymentOption"
+                  value="10009098686 Andnet Melaku"
+                  checked={userInput.paymentOption === "Bank transfer"}
+                  onChange={() => handlePaymentOptionChange("10009098686 Andnet Melaku")}
+                />
+                Bank Transfer
+              </label>
 
-        <div onClick={handleNextClick} className="placeOrd">
-          <Link to='/reciept'>Place Order</Link>
+              <br />
+
+              <label>
+                <input
+                  type="radio"
+                  name="paymentOption"
+                  value="You will pay when you receive a food!"
+                  checked={userInput.paymentOption === "Cash on delivery"}
+                  onChange={() => handlePaymentOptionChange("You will pay when you receive a food!")}
+                />
+                Cash on delivery
+              </label>
+            </div>
+
+            <p>{userInput.paymentOption && `${userInput.paymentOption}`}</p>
+            <p>Order Date: {userInput.orderDate}</p>
+          </div>
+
+          <div onClick={handleNextClick} className="placeOrd">
+            <Link to='/reciept'>Place Order</Link>
+          </div>
         </div>
-      </div>
+        </>
+        
+      ) : (
+        <div className="error-message">
+         <IoFastFood className='error_logo'/> 
+         <h4>😭 Sorry! We are not available now</h4>
+         <p>We only work from 5:00AM to 8:00PM</p>
+        </div>
+      )}
     </>
   );
 };
