@@ -271,7 +271,7 @@ const FoodMenu = () => {
                   name="paymentOption"
                   value="10009098686 Andnet Melaku"
                   checked={userInput.paymentOption === "Bank transfer"}
-                  onChange={() => handlePaymentOptionChange("10009098686 Andnet Melaku")}
+                  onChange={() => handlePaymentOptionChange("Please call 0951670589")}
                 />
                 Bank Transfer
               </label>
