@@ -18,8 +18,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />}/>
         <Route path="/reciept" element={<Reciept />}/>
-        <Route path="/delivery" element={<Delivery />}/>
-        <Route path="/report" element={<Report />}/>
+        <Route path="/dhuehddhchcvxzchalvcXccgsfcgxguxzcv" element={<Delivery />}/>
+        <Route path="/svauccgbhjkljbhgcfdgucszdxtfgyuhijksdfg" element={<Report />}/>
         
       </Routes>
   
